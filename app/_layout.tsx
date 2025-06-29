@@ -1,29 +1,44 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { AuthProvider, useAuth } from "@/contexts/auth";
+import { Slot, useRouter, useSegments } from "expo-router";
+import { useEffect } from "react";
+import { ActivityIndicator, View } from "react-native";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+function LayoutWrapper() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+  const segments = useSegments();
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const isAuthRoute = segments[0] === "(auth)";
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
+  useEffect(() => {
+    if (!loading) {
+      if (!user && !isAuthRoute) {
+        router.replace("/(auth)/login");
+      } else if (user && isAuthRoute) {
+        router.replace("/(tabs)");
+      }
+    }
+  }, [loading, user, isAuthRoute, router]);
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  if ((!user && !isAuthRoute) || (user && isAuthRoute)) {
     return null;
   }
 
+  return <Slot />;
+}
+
+export default function RootLayout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <AuthProvider>
+      <LayoutWrapper />
+    </AuthProvider>
   );
 }
