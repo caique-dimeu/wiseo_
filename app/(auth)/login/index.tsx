@@ -1,16 +1,10 @@
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
 import { auth } from "@/libs/firebaseConfig";
 import { useRouter } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
-import {
-  ActivityIndicator,
-  Button,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -18,15 +12,11 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const handleLogin = async () => {
     setLoading(true);
-    setError("");
     try {
       await signInWithEmailAndPassword(auth, email, password);
-    } catch (e: any) {
-      setError(e.message || "Erro ao fazer login");
     } finally {
       setLoading(false);
     }
@@ -36,33 +26,37 @@ export default function LoginScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
 
-      <TextInput
+      <Input
         placeholder="Email"
-        style={styles.input}
         autoCapitalize="none"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
       />
-      <TextInput
+      <Input
         placeholder="Senha"
-        style={styles.input}
         secureTextEntry
         value={password}
         onChangeText={setPassword}
       />
 
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-
       {loading ? (
         <ActivityIndicator />
       ) : (
-        <Button title="Entrar" onPress={handleLogin} />
+        <Button
+          text="Entrar com Google"
+          icon="sm google"
+          variant="ghost"
+          click={() => console.log("clique")}
+        />
       )}
 
-      <TouchableOpacity onPress={() => router.replace("/register")}>
-        <Text style={styles.link}>Não tem conta? Criar agora</Text>
-      </TouchableOpacity>
+      <Button
+        text="Entrar com Google"
+        icon="sm google"
+        variant="ghost"
+        click={() => console.log("clique")}
+      />
     </View>
   );
 }

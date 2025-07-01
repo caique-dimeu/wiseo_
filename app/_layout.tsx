@@ -1,10 +1,13 @@
-import { AuthProvider, useAuth } from "@/contexts/auth";
 import { Slot, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 
+import { AuthProvider, useAuth } from "@/contexts/auth";
+import { useAppAssets } from "@/hooks/useAppAssets";
+
 function LayoutWrapper() {
   const { user, loading } = useAuth();
+  const { isReady } = useAppAssets();
   const router = useRouter();
   const segments = useSegments();
 
@@ -20,7 +23,7 @@ function LayoutWrapper() {
     }
   }, [loading, user, isAuthRoute, router]);
 
-  if (loading) {
+  if (loading || !isReady) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" />
