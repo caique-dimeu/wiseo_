@@ -1,4 +1,4 @@
-import colors from "@/styles/colors";
+import colors from "@/styles/variables/colors";
 import type { Variants } from "..";
 
 export const PRESSET_COLORS: Record<Variants, string> = {

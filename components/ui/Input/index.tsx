@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { TextInputProps } from "react-native";
 
-import colors from "@/styles/colors";
+import colors from "@/styles/variables/colors";
 import type Feedbacks from "@/types/Feedbacks";
 import type Sizes from "@/types/Sizes";
 import removePx from "@/utils/removePx";

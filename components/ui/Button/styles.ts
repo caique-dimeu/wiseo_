@@ -1,11 +1,11 @@
+import colors from "@/styles/variables/colors";
 import type Sizes from "@/types/Sizes";
-import styled from "styled-components/native";
-import type { Variants } from ".";
-import colors from "@/styles/colors";
-import { PRESSET_SIZES } from "./pressets/sizes";
-import { PRESSET_COLORS } from "./pressets/colors";
 import { getResponsiveSize } from "@/utils/responsive";
 import { Text } from "react-native";
+import styled from "styled-components/native";
+import type { Variants } from ".";
+import { PRESSET_COLORS } from "./pressets/colors";
+import { PRESSET_SIZES } from "./pressets/sizes";
 
 interface StyledButtonProps {
   variant: Variants;

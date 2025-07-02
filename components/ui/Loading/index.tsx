@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { Animated, Easing } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 
-import colors from "@/styles/colors";
+import colors from "@/styles/variables/colors";
 
 import { Container, RotatingSvg } from "./styles";
 

@@ -60,7 +60,7 @@ export default function RegisterScreen() {
         <Button title="Cadastrar" onPress={handleRegister} />
       )}
 
-      <TouchableOpacity onPress={() => router.replace("/login")}>
+      <TouchableOpacity onPress={() => router.replace("../(auth)/login")}>
         <Text style={styles.link}>Já tem uma conta? Entrar</Text>
       </TouchableOpacity>
     </View>

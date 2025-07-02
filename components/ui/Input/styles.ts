@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 
-import colors from "@/styles/colors";
+import colors from "@/styles/variables/colors";
 import type Sizes from "@/types/Sizes";
 import { getResponsiveSize } from "@/utils/responsive";
 
@@ -23,7 +23,7 @@ const getBorder = (status: InputStatus, isFocused: boolean): string => {
   const prefix = "1px solid";
 
   if (status === "default")
-    return `${prefix} ${isFocused ? colors.neutral[400] : colors.neutral[100]}`;
+    return `${prefix} ${isFocused ? colors.neutral[400] : "transparent"}`;
   if (status === "danger")
     return `${prefix} ${isFocused ? colors.danger[500] : colors.danger[100]}`;
   if (status === "success")
@@ -36,7 +36,7 @@ const getBorder = (status: InputStatus, isFocused: boolean): string => {
 
 export const InputContainer = styled.View<InputContainerProps>`
   flex-direction: row;
-  background-color: ${colors.neutral[50]};
+  background-color: ${colors.neutral[25]};
   align-items: center;
   width: 100%;
   border: ${({ isFocused, status }) => getBorder(status, isFocused)};

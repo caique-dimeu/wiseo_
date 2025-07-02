@@ -1,9 +1,10 @@
 import { Slot, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator } from "react-native";
 
 import { AuthProvider, useAuth } from "@/contexts/auth";
 import { useAppAssets } from "@/hooks/useAppAssets";
+import { MainLayout } from "@/styles/layouts/_layout.styles";
 
 function LayoutWrapper() {
   const { user, loading } = useAuth();
@@ -16,18 +17,19 @@ function LayoutWrapper() {
   useEffect(() => {
     if (!loading) {
       if (!user && !isAuthRoute) {
-        router.replace("/(auth)/login");
+
+        router.navigate("../(auth)/login");
       } else if (user && isAuthRoute) {
-        router.replace("/(tabs)");
+        router.replace("../(tabs)/home");
       }
     }
   }, [loading, user, isAuthRoute, router]);
 
   if (loading || !isReady) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <MainLayout>
         <ActivityIndicator size="large" />
-      </View>
+      </MainLayout>
     );
   }
 
@@ -35,7 +37,11 @@ function LayoutWrapper() {
     return null;
   }
 
-  return <Slot />;
+  return (
+    <MainLayout>
+      <Slot />
+    </MainLayout>
+  );
 }
 
 export default function RootLayout() {
