@@ -38,7 +38,7 @@ export default function CustomTabLayout() {
 const styles = StyleSheet.create({
   tabBar: {
     position: "absolute",
-    bottom: removePx(getResponsiveSize(32)),
+    bottom: removePx(getResponsiveSize(0)),
     left: removePx(getResponsiveSize(20)),
     right: removePx(getResponsiveSize(20)),
     height: removePx(getResponsiveSize(56)),

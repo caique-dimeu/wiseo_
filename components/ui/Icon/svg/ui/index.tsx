@@ -1,4 +1,5 @@
 import ICAnalytics from "./Analytics";
+import ICArrowCircle from "./ArrowCircle";
 import ICBell from "./Bell";
 import ICDashboard from "./Dashboard";
 import ICInsights from "./Insights";
@@ -12,4 +13,5 @@ export const UI = {
   "ui insights": ICInsights,
   "ui settings": ICSettings,
   "ui bell": ICBell,
+  "ui arrow-circle": ICArrowCircle,
 };
