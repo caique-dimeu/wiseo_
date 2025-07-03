@@ -25,6 +25,22 @@ export default function PersonalInfoScreen() {
   const [professionError, setProfessionError] = useState("");
   const [incomeError, setIncomeError] = useState("");
 
+  const formatBirth = (text: string) => {
+    return text
+      .replace(/\D/g, "")
+      .replace(/(\d{2})(\d)/, "$1/$2")
+      .replace(/(\d{2})\/(\d{2})(\d)/, "$1/$2/$3")
+      .slice(0, 10);
+  };
+
+  const formatPhone = (text: string) => {
+    return text
+      .replace(/\D/g, "")
+      .replace(/^(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{5})(\d{4})$/, "$1-$2")
+      .slice(0, 15);
+  };
+
   const handleNext = () => {
     let hasError = false;
 
@@ -110,18 +126,20 @@ export default function PersonalInfoScreen() {
             <Input
               placeholder="Data de nascimento"
               value={birth}
-              onChangeText={setBirth}
+              onChangeText={(text) => setBirth(formatBirth(text))}
               status={birthError ? "danger" : "default"}
               helperText={birthError}
+              keyboardType="numeric"
             />
           </View>
           <View style={{ marginBottom: removePx(getResponsiveSize(14)) }}>
             <Input
               placeholder="Telefone"
               value={phone}
-              onChangeText={setPhone}
+              onChangeText={(text) => setPhone(formatPhone(text))}
               status={phoneError ? "danger" : "default"}
               helperText={phoneError}
+              keyboardType="phone-pad"
             />
           </View>
         </View>
@@ -156,6 +174,7 @@ export default function PersonalInfoScreen() {
               onChangeText={setIncome}
               status={incomeError ? "danger" : "default"}
               helperText={incomeError}
+              keyboardType="numeric"
             />
           </View>
         </View>
