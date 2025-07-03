@@ -2,15 +2,7 @@ import { useAuth } from "@/contexts/auth";
 import { db } from "@/libs/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Button,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 export default function HomeScreen() {
   const { user, logout } = useAuth();
@@ -56,35 +48,7 @@ export default function HomeScreen() {
     );
   }
 
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Image source={{ uri: userData.avatar }} style={styles.avatar} />
-
-      <Text style={styles.name}>{userData.name}</Text>
-      <Text style={styles.username}>@{userData.user}</Text>
-
-      <View style={styles.infoGroup}>
-        <Text style={styles.label}>Profissão:</Text>
-        <Text style={styles.value}>
-          {userData.profession || "Não informado"}
-        </Text>
-      </View>
-
-      <View style={styles.infoGroup}>
-        <Text style={styles.label}>Renda mensal:</Text>
-        <Text style={styles.value}>R$ {userData.income || "0"}</Text>
-      </View>
-
-      <View style={styles.infoGroup}>
-        <Text style={styles.label}>Nascimento:</Text>
-        <Text style={styles.value}>{userData.birth || "Não informado"}</Text>
-      </View>
-
-      <View style={{ marginTop: 32 }}>
-        <Button title="Sair" onPress={logout} color="#d9534f" />
-      </View>
-    </ScrollView>
-  );
+  return <Text style={styles.name}>{userData.name}</Text>;
 }
 
 const styles = StyleSheet.create({

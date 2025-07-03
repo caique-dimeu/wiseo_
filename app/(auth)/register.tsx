@@ -1,96 +1,126 @@
-import { auth } from "@/libs/firebaseConfig";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
+import { useRegister } from "@/contexts/register";
+import { HelpText, Regular } from "@/styles/layouts/_layout.styles";
+import { Subtitle, Title } from "@/styles/layouts/auth/_layout.styles";
+import colors from "@/styles/variables/colors";
+import removePx from "@/utils/removePx";
+import { getResponsiveSize } from "@/utils/responsive";
 import { useRouter } from "expo-router";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
-import {
-  ActivityIndicator,
-  Button,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Pressable, View } from "react-native";
 
 export default function RegisterScreen() {
   const router = useRouter();
+  const { update } = useRegister();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  const handleRegister = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      // Redirecionado automaticamente pelo _layout.tsx
-    } catch (e: any) {
-      setError(e.message || "Erro ao criar conta");
-    } finally {
-      setLoading(false);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+
+  const handleNext = () => {
+    setEmailError("");
+    setPasswordError("");
+    setConfirmPasswordError("");
+
+    if (password !== confirmPassword) {
+      setConfirmPasswordError("As senhas não coincidem.");
+      return;
     }
+
+    update({ email, password });
+    router.replace("./personal");
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Criar Conta</Text>
+    <View>
+      <View>
+        <View style={{ flexDirection: "row" }}>
+          <Title style={{ width: "80%" }}>Vamos, Crie uma Conta</Title>
+        </View>
+        <Subtitle>
+          Estamos animados para te receber! Por favor, crie sua conta para
+          começar.
+        </Subtitle>
+      </View>
 
-      <TextInput
-        placeholder="Email"
-        style={styles.input}
-        autoCapitalize="none"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        placeholder="Senha"
-        style={styles.input}
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
+      <View
+        style={{ width: "100%", marginBottom: removePx(getResponsiveSize(64)) }}
+      >
+        <View style={{ marginBottom: removePx(getResponsiveSize(14)) }}>
+          <Input
+            placeholder="Email"
+            autoCapitalize="none"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
+            status={emailError ? "danger" : "default"}
+            helperText={emailError}
+          />
+        </View>
 
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+        <View style={{ marginBottom: removePx(getResponsiveSize(14)) }}>
+          <Input
+            placeholder="Senha"
+            value={password}
+            onChangeText={setPassword}
+            status={passwordError ? "danger" : "default"}
+            helperText={passwordError}
+            type="password"
+          />
+        </View>
 
-      {loading ? (
-        <ActivityIndicator />
-      ) : (
-        <Button title="Cadastrar" onPress={handleRegister} />
-      )}
+        <Input
+          placeholder="Confirme a senha"
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          status={confirmPasswordError ? "danger" : "default"}
+          helperText={confirmPasswordError}
+          type="password"
+        />
+      </View>
 
-      <TouchableOpacity onPress={() => router.replace("../(auth)/login")}>
-        <Text style={styles.link}>Já tem uma conta? Entrar</Text>
-      </TouchableOpacity>
+      <View>
+        <Button
+          text="Continuar para o cadastro"
+          variant="primary"
+          click={handleNext}
+          loading={loading}
+        />
+
+        <View style={{ alignItems: "center" }}>
+          <Regular>ou</Regular>
+        </View>
+
+        <View style={{ marginBottom: removePx(getResponsiveSize(46)) }}>
+          <Button
+            text="Entrar com Google"
+            icon="sm google"
+            variant="secondary"
+            click={() => console.log("clique")}
+          />
+        </View>
+
+        <Pressable
+          style={{ justifyContent: "center", flexDirection: "row" }}
+          onPress={() => router.replace("./login")}
+        >
+          <HelpText>Já possui Conta? </HelpText>
+          <HelpText
+            style={{
+              color: colors.brand[500],
+              fontFamily: "Inter_600SemiBold",
+            }}
+          >
+            Entrar
+          </HelpText>
+        </Pressable>
+      </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", padding: 16 },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 24,
-    textAlign: "center",
-  },
-  input: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    marginBottom: 12,
-    paddingHorizontal: 8,
-    borderRadius: 4,
-  },
-  error: {
-    color: "red",
-    marginBottom: 12,
-    textAlign: "center",
-  },
-  link: {
-    marginTop: 16,
-    color: "#007AFF",
-    textAlign: "center",
-  },
-});

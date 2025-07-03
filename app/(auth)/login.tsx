@@ -18,7 +18,27 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
   const handleLogin = async () => {
+    setEmailError("");
+    setPasswordError("");
+
+    let hasError = false;
+
+    if (!email.trim()) {
+      setEmailError("Preencha seu email.");
+      hasError = true;
+    }
+
+    if (!password.trim()) {
+      setPasswordError("Preencha sua senha.");
+      hasError = true;
+    }
+
+    if (hasError) return;
+
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
@@ -49,14 +69,18 @@ export default function LoginScreen() {
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
+            status={emailError ? "danger" : "default"}
+            helperText={emailError}
           />
         </View>
 
         <Input
           placeholder="Senha"
-          secureTextEntry
           value={password}
           onChangeText={setPassword}
+          status={passwordError ? "danger" : "default"}
+          helperText={passwordError}
+          type="password"
         />
       </View>
 

@@ -17,7 +17,6 @@ function LayoutWrapper() {
   useEffect(() => {
     if (!loading) {
       if (!user && !isAuthRoute) {
-
         router.navigate("../(auth)/login");
       } else if (user && isAuthRoute) {
         router.replace("../(tabs)/home");

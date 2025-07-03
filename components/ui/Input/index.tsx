@@ -1,11 +1,10 @@
-import { useState } from "react";
-import type { TextInputProps } from "react-native";
-
+import { HelpText } from "@/styles/layouts/_layout.styles"; // Certifique-se que está exportado
 import colors from "@/styles/variables/colors";
 import type Feedbacks from "@/types/Feedbacks";
 import type Sizes from "@/types/Sizes";
 import removePx from "@/utils/removePx";
-
+import { useState } from "react";
+import type { TextInputProps } from "react-native";
 import Icon from "../Icon";
 import type { IconsNames } from "../Icon/svg/icons";
 import Loading from "../Loading";
@@ -24,6 +23,7 @@ interface InputProps extends TextInputProps {
   iconRight?: IconsNames;
   iconLeft?: IconsNames;
   status?: InputStatus;
+  helperText?: string; // ✅ Adicionado aqui
   loading?: boolean;
   size?: Sizes;
   type?: "password" | "text" | "number" | "email";
@@ -34,6 +34,7 @@ export default function Input({
   iconLeft,
   loading,
   status = "default",
+  helperText, // ✅ Recebe aqui
   size = "medium",
   type = "text",
   ...rest
@@ -44,45 +45,60 @@ export default function Input({
   const toggleVisibilityIcon = () => setCanView((prev) => !prev);
 
   return (
-    <InputContainer status={status} isFocused={isFocused} size={size}>
-      {iconLeft && (
-        <LeftContainer>
-          <Icon name={iconLeft} size={PRESSET_SIZES[size].icon || 20} />
-        </LeftContainer>
-      )}
+    <>
+      <InputContainer status={status} isFocused={isFocused} size={size}>
+        {iconLeft && (
+          <LeftContainer>
+            <Icon name={iconLeft} size={PRESSET_SIZES[size].icon || 20} />
+          </LeftContainer>
+        )}
 
-      <StyledInput
-        placeholderTextColor={colors.neutral[500]}
-        selectionColor={colors.neutral[500]}
-        status={status}
-        size={size}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        secureTextEntry={type === "password" && !canView}
-        {...rest}
-      />
+        <StyledInput
+          placeholderTextColor={colors.neutral[500]}
+          selectionColor={colors.neutral[500]}
+          status={status}
+          size={size}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          secureTextEntry={type === "password" && !canView}
+          {...rest}
+        />
 
-      {loading && (
-        <RightContainer>
-          <Loading size={removePx(PRESSET_SIZES[size].font.size) || 20} />
-        </RightContainer>
-      )}
+        {loading && (
+          <RightContainer>
+            <Loading size={removePx(PRESSET_SIZES[size].font.size) || 20} />
+          </RightContainer>
+        )}
 
-      {iconRight && type !== "password" && (
-        <RightContainer>
-          <Icon name={iconRight} size={PRESSET_SIZES[size].icon || 20} />
-        </RightContainer>
-      )}
+        {iconRight && type !== "password" && (
+          <RightContainer>
+            <Icon name={iconRight} size={PRESSET_SIZES[size].icon || 20} />
+          </RightContainer>
+        )}
 
-      {type === "password" && (
-        <ButtonContainer onPress={toggleVisibilityIcon}>
-          <Icon
-            name={canView ? "sec eye" : "sec eye-closed"}
-            size={PRESSET_SIZES[size].icon || 20}
-            color={colors.neutral[500]}
-          />
-        </ButtonContainer>
+        {type === "password" && (
+          <ButtonContainer onPress={toggleVisibilityIcon}>
+            <Icon
+              name={canView ? "sec eye" : "sec eye-closed"}
+              size={PRESSET_SIZES[size].icon || 20}
+              color={colors.neutral[500]}
+            />
+          </ButtonContainer>
+        )}
+      </InputContainer>
+
+      {helperText && (
+        <HelpText
+          style={{
+            color: colors.base.red,
+            fontSize: 13,
+            marginTop: 4,
+            marginLeft: 4,
+          }}
+        >
+          {helperText}
+        </HelpText>
       )}
-    </InputContainer>
+    </>
   );
 }
